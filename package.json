@@ -1,0 +1,21 @@
+{
+  "name": "openmusicapi-v1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon ./src/server.js",
+    "lint": "eslint ./src"
+  },
+  "author": "danielsidauruk",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "package.json": "^2.0.1"
+  }
+}
