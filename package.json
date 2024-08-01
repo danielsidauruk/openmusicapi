@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start-prod": "NODE_ENV=production node ./src/server.js",
     "start:dev": "nodemon ./src/server.js",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "migrate": "node-pg-migrate"
   },
   "author": "danielsidauruk",
   "license": "ISC",
@@ -16,6 +18,12 @@
     "nodemon": "^3.0.1"
   },
   "dependencies": {
-    "package.json": "^2.0.1"
+    "@hapi/hapi": "^21.3.2",
+    "dotenv": "^16.4.5",
+    "joi": "^17.11.0",
+    "nanoid": "^3.1.20",
+    "node-pg-migrate": "^7.6.0",
+    "package.json": "^2.0.1",
+    "pg": "^8.12.0"
   }
 }
