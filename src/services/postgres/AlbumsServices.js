@@ -9,9 +9,7 @@ class AlbumsService {
     this._pool = new Pool();
   }
 
-  async addAlbum({
-    name, year,
-  }) {
+  async addAlbum({ name, year }) {
     const id = `album-${nanoid(16)}`;
 
     const query = {
@@ -54,7 +52,6 @@ class AlbumsService {
       text: 'UPDATE albums SET name = $1, year = $2 WHERE id = $3 RETURNING id',
       values: [name, year, id],
     };
-
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
