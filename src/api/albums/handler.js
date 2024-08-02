@@ -31,10 +31,13 @@ class AlbumsHandler {
   async getAlbumByIdHandler(request, h) {
     const { id } = request.params;
     const album = await this._service.getAlbumById(id);
+    const songs = await this._service.getSongsInAlbum(id);
+    const albumWithSongs = { ...album, songs };
+
     return {
       status: 'success',
       data: {
-        album,
+        album: albumWithSongs,
       },
     };
   }
@@ -54,6 +57,7 @@ class AlbumsHandler {
   async deleteAlbumByIdHandler(request, h) {
     const { id } = request.params;
     await this._service.deleteAlbumById(id);
+
     return {
       status: 'success',
       message: 'Album deleted successfully.',
