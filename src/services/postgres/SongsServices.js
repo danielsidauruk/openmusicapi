@@ -61,6 +61,7 @@ class SongsService {
     }
 
     const { rows } = await this._pool.query({ text, values });
+
     return rows.map(mapDBToModel);
   }
 
