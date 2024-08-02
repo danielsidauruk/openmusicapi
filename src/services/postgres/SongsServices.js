@@ -47,21 +47,20 @@ class SongsService {
   }
 
   async getSongsWithParams(title, performer) {
-    let queryText = 'SELECT id, title, performer FROM songs WHERE 1=1';
-    const queryValues = [];
+    let text = 'SELECT id, title, performer FROM songs WHERE 1=1';
+    const values = [];
 
     if (title) {
-      queryText += ` AND LOWER(title) LIKE $${queryValues.length + 1}`;
-      queryValues.push(`%${title}%`);
+      text += ` AND LOWER(title) LIKE $${values.length + 1}`;
+      values.push(`%${title}%`);
     }
 
     if (performer) {
-      queryText += ` AND LOWER(performer) LIKE $${queryValues.length + 1}`;
-      queryValues.push(`%${performer}%`);
+      text += ` AND LOWER(performer) LIKE $${values.length + 1}`;
+      values.push(`%${performer}%`);
     }
 
-    const { rows } = await this._pool.query({ text: queryText, values: queryValues });
-
+    const { rows } = await this._pool.query({ text, values });
     return rows.map(mapDBToModel);
   }
 
