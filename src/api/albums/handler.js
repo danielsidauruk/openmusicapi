@@ -56,7 +56,7 @@ class AlbumsHandler {
     await this._service.deleteAlbumById(id);
     return {
       status: 'success',
-      message: 'Album deleted successfilly.',
+      message: 'Album deleted successfully.',
     };
   }
 }
