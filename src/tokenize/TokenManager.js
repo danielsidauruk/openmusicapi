@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const Jwt = require('@hapi/jwt');
 const InvariantError = require('../exceptions/InvariantError');
 
@@ -12,7 +11,7 @@ const TokenManager = {
       const { payload } = artifacts.decoded;
       return payload;
     } catch (error) {
-      throw new InvariantError('Refresh token tidak valid');
+      throw new InvariantError('Refresh token is not valid.');
     }
   },
 };

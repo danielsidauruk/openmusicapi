@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-unused-vars */
 const autoBind = require('auto-bind');
 
 class AuthenticationsHandler {
@@ -18,6 +18,7 @@ class AuthenticationsHandler {
 
   async postAuthenticationHandler(request, h) {
     this.validator.validatePostAuthenticationPayload(request.payload);
+
     const { username, password } = request.payload;
     const id = await this.usersService.verifyUserCredential(username, password);
 
@@ -25,9 +26,10 @@ class AuthenticationsHandler {
     const refreshToken = await this.tokenManager.generateRefreshToken({ id });
 
     await this.authenticationsService.addRefreshToken(refreshToken);
+
     const response = h.response({
       status: 'success',
-      message: 'Authentication successfully added.',
+      message: 'Authentication added successfully.',
       data: {
         accessToken,
         refreshToken,
@@ -38,32 +40,34 @@ class AuthenticationsHandler {
     return response;
   }
 
-  async putAuthenticationHandler(request) {
+  async putAuthenticationHandler(request, h) {
     this.validator.validatePutAuthenticationPayload(request.payload);
 
     const { refreshToken } = request.payload;
     await this.authenticationsService.verifyRefreshToken(refreshToken);
+
     const { id } = this.tokenManager.verifyRefreshToken(refreshToken);
     const accessToken = this.tokenManager.generateAccessToken({ id });
+
     return {
       status: 'success',
-      message: 'Access Token berhasil diperbarui',
+      message: 'Access Token updated successfully.',
       data: {
         accessToken,
       },
     };
   }
 
-  async deleteAuthenticationHandler(request) {
+  async deleteAuthenticationHandler(request, h) {
     this.validator.validateDeleteAuthenticationPayload(request.payload);
 
     const { refreshToken } = request.payload;
-
     await this.authenticationsService.verifyRefreshToken(refreshToken);
     await this.authenticationsService.deleteRefreshToken(refreshToken);
+
     return {
       status: 'success',
-      message: 'Refresh Token berhasil dihapus',
+      message: 'Refresh Token deleted successfully.',
     };
   }
 }

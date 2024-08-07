@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-vars */
+const autoBind = require('auto-bind');
+
 class SongsHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
 
-    this.postSongHandler = this.postSongHandler.bind(this);
-    this.getSongsHandler = this.getSongsHandler.bind(this);
-    this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
-    this.putSongByIdHandler = this.putSongByIdHandler.bind(this);
-    this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
+    autoBind(this);
   }
 
   async postSongHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
+
     const {
       title, year, genre, performer, duration, albumId,
     } = request.payload;
@@ -58,8 +57,8 @@ class SongsHandler {
 
   async putSongByIdHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
-    const { id } = request.params;
 
+    const { id } = request.params;
     await this._service.editSongById(id, request.payload);
 
     return {
@@ -71,9 +70,10 @@ class SongsHandler {
   async deleteSongByIdHandler(request, h) {
     const { id } = request.params;
     await this._service.deleteSongById(id);
+
     return {
       status: 'success',
-      message: 'Song deleted successfully',
+      message: 'Song deleted successfully.',
     };
   }
 }
