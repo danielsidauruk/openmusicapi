@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const autoBind = require('auto-bind');
 
 class PlaylistsHandler {
@@ -18,6 +17,7 @@ class PlaylistsHandler {
     const { name: playlist } = request.payload;
 
     const playlistId = await this.playlistsService.addPlaylist(playlist, credentialId);
+
     const response = h.response({
       status: 'success',
       message: 'Successfully created playlist.',
@@ -25,7 +25,6 @@ class PlaylistsHandler {
         playlistId,
       },
     });
-
     response.code(201);
     return response;
   }
@@ -34,12 +33,11 @@ class PlaylistsHandler {
     const { id: credentialId } = request.auth.credentials;
     const playlists = await this.playlistsService.getPlaylistsByOwner(credentialId);
 
-    return {
+    const response = h.response({
       status: 'success',
-      data: {
-        playlists,
-      },
-    };
+      data: { playlists },
+    });
+    return response;
   }
 
   async deletePlaylistByIdHandler(request, h) {
@@ -49,10 +47,11 @@ class PlaylistsHandler {
     await this.playlistsService.verifyPlaylistOwner(playlistId, credentialId);
     await this.playlistsService.deletePlaylistById(playlistId);
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Successfully deleted playlists.',
-    };
+    });
+    return response;
   }
 
   async postPlaylistSongHandler(request, h) {
@@ -66,16 +65,13 @@ class PlaylistsHandler {
     await this.playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const playlistSongId = await this.playlistsService.addPlaylistSong(playlistId, songId);
-
     await this.activitiesService.addActivity(playlistId, songId, credentialId, 'add');
+
     const response = h.response({
       status: 'success',
       message: 'Successfully added song to playlist.',
-      data: {
-        playlistSongId,
-      },
+      data: { playlistSongId },
     });
-
     response.code(201);
     return response;
   }
@@ -90,12 +86,11 @@ class PlaylistsHandler {
     const songs = await this.playlistsService.getPlaylistSongById(playlistId);
     playlist.songs = songs;
 
-    return {
+    const response = h.response({
       status: 'success',
-      data: {
-        playlist,
-      },
-    };
+      data: { playlist },
+    });
+    return response;
   }
 
   async deletePlaylistSongByIdHandler(request, h) {
@@ -107,27 +102,12 @@ class PlaylistsHandler {
     await this.playlistsService.deletePlaylistSongById(songId);
     await this.activitiesService.addActivity(playlistId, songId, credentialId, 'delete');
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Successfully deleted song from playlist.',
-    };
+    });
+    return response;
   }
-
-  // async getPlaylistActivitiesHandler(request, h) {
-  //   const { id: credentialId } = request.auth.credentials;
-  //   const { id: playlistId } = request.params;
-
-  //   await this.playlistsService.verifyPlaylistAccess(playlistId, credentialId);
-  //   const activities = await this.activitiesService.getActivitiesByPlaylist(playlistId);
-
-  //   return {
-  //     status: 'success',
-  //     data: {
-  //       playlistId,
-  //       activities,
-  //     },
-  //   };
-  // }
 }
 
 module.exports = PlaylistsHandler;

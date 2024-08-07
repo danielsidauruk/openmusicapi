@@ -29,14 +29,6 @@ exports.up = (pgm) => {
       notNull: false,
     },
   });
-
-  pgm.addConstraint('songs', 'fk_songs_album_id', {
-    foreignKeys: {
-      columns: 'albumId',
-      references: 'albums(id)',
-      onDelete: 'cascade',
-    },
-  });
 };
 
 exports.down = (pgm) => {

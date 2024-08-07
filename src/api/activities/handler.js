@@ -15,13 +15,14 @@ class ActivitiesHandler {
     await this.playlistsService.verifyPlaylistAccess(playlistId, credentialId);
     const activities = await this.activitiesService.getActivitiesByPlaylist(playlistId);
 
-    return {
+    const response = h.response({
       status: 'success',
       data: {
         playlistId,
         activities,
       },
-    };
+    });
+    return response;
   }
 }
 

@@ -10,7 +10,6 @@ module.exports = {
       playlistsService,
       songsService,
       activitiesService,
-      // tokenManager,
       validator,
     },
   ) => {
@@ -18,7 +17,6 @@ module.exports = {
       playlistsService,
       songsService,
       activitiesService,
-      // tokenManager,
       validator,
     );
 

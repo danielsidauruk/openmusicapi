@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const autoBind = require('auto-bind');
 
 class AuthenticationsHandler {
@@ -35,7 +34,6 @@ class AuthenticationsHandler {
         refreshToken,
       },
     });
-
     response.code(201);
     return response;
   }
@@ -49,13 +47,12 @@ class AuthenticationsHandler {
     const { id } = this.tokenManager.verifyRefreshToken(refreshToken);
     const accessToken = this.tokenManager.generateAccessToken({ id });
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Access Token updated successfully.',
-      data: {
-        accessToken,
-      },
-    };
+      data: { accessToken },
+    });
+    return response;
   }
 
   async deleteAuthenticationHandler(request, h) {
@@ -65,10 +62,11 @@ class AuthenticationsHandler {
     await this.authenticationsService.verifyRefreshToken(refreshToken);
     await this.authenticationsService.deleteRefreshToken(refreshToken);
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Refresh Token deleted successfully.',
-    };
+    });
+    return response;
   }
 }
 

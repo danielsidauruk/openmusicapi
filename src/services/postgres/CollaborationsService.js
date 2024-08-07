@@ -40,7 +40,6 @@ class CollaborationsService {
         WHERE user_id = $1 AND playlist_id = $2`,
       values: [userId, playlistId],
     };
-
     const result = await this.pool.query(query);
     if (!result.rowCount) {
       throw new InvariantError('You don\'t have collaboration.');

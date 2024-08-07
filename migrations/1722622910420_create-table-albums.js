@@ -13,8 +13,17 @@ exports.up = (pgm) => {
       notNull: true,
     },
   });
+
+  pgm.addConstraint('songs', 'fk_songs_album_id', {
+    foreignKeys: {
+      columns: 'album_id',
+      references: 'albums(id)',
+      onDelete: 'cascade',
+    },
+  });
 };
 
 exports.down = (pgm) => {
+  pgm.dropConstraint('songs', 'fk_songs_album_id');
   pgm.dropTable('albums');
 };

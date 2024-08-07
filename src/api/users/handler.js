@@ -19,7 +19,6 @@ class UsersHandler {
       message: 'Successfully added new user.',
       data: { userId },
     });
-
     response.code(201);
     return response;
   }

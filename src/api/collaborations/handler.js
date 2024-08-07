@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const autoBind = require('auto-bind');
 
 class CollaborationsHandler {
@@ -22,14 +21,12 @@ class CollaborationsHandler {
     await this.playlistsService.verifyPlaylistOwner(playlistId, credentialId);
 
     const collaborationId = await this.collaborationsService.addCollaboration(playlistId, userId);
+
     const response = h.response({
       status: 'success',
       message: 'Collaboration added successfully.',
-      data: {
-        collaborationId,
-      },
+      data: { collaborationId },
     });
-
     response.code(201);
     return response;
   }
@@ -43,13 +40,13 @@ class CollaborationsHandler {
     await this.usersService.verifyUser(userId);
     await this.playlistsService.verifyPlaylist(playlistId);
     await this.playlistsService.verifyPlaylistOwner(playlistId, credentialId);
-
     await this.collaborationsService.deleteCollaborationById(playlistId, userId);
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Successfully deleted collaboration.',
-    };
+    });
+    return response;
   }
 }
 

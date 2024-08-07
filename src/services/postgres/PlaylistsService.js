@@ -35,6 +35,7 @@ class PlaylistsService {
       values: [owner],
     };
     const result = await this.pool.query(query);
+
     return result.rows;
   }
 
@@ -50,6 +51,7 @@ class PlaylistsService {
     if (!result.rowCount) {
       throw new NotFoundError('Playlist not found.');
     }
+
     return result.rows[0];
   }
 
@@ -59,6 +61,7 @@ class PlaylistsService {
       values: [playlistId],
     };
     const result = await this.pool.query(query);
+
     if (!result.rowCount) {
       throw new InvariantError('Failed to delete playlist.');
     }
@@ -70,8 +73,8 @@ class PlaylistsService {
       text: 'INSERT INTO playlistsongs VALUES($1, $2, $3) RETURNING id',
       values: [id, playlistId, songId],
     };
-
     const result = await this.pool.query(query);
+
     if (!result.rowCount) {
       throw new InvariantError('Failed to add Playlist Song.');
     }

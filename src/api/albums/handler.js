@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const autoBind = require('auto-bind');
 
 class AlbumsHandler {
@@ -18,11 +17,8 @@ class AlbumsHandler {
     const response = h.response({
       status: 'success',
       message: 'Album successfully added.',
-      data: {
-        albumId,
-      },
+      data: { albumId },
     });
-
     response.code(201);
     return response;
   }
@@ -33,12 +29,13 @@ class AlbumsHandler {
     const songs = await this._service.getSongsInAlbum(id);
     const albumWithSongs = { ...album, songs };
 
-    return {
+    const response = h.response({
       status: 'success',
       data: {
         album: albumWithSongs,
       },
-    };
+    });
+    return response;
   }
 
   async putAlbumByIdHandler(request, h) {
@@ -47,20 +44,22 @@ class AlbumsHandler {
     const { id } = request.params;
     await this._service.editAlbumById(id, request.payload);
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Album updated successfully.',
-    };
+    });
+    return response;
   }
 
   async deleteAlbumByIdHandler(request, h) {
     const { id } = request.params;
     await this._service.deleteAlbumById(id);
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Album deleted successfully.',
-    };
+    });
+    return response;
   }
 }
 
