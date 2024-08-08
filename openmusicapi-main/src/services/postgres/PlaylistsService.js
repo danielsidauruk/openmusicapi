@@ -6,7 +6,7 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 
 class PlaylistsService {
   constructor(collaborationsService) {
-    this.pool = new Pool();
+    this._pool = new Pool();
     this.collaborationsService = collaborationsService;
   }
 
@@ -17,7 +17,7 @@ class PlaylistsService {
       text: 'INSERT INTO playlists VALUES($1, $2, $3) RETURNING id',
       values: [id, playlist, owner],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     if (!result.rowCount) {
       throw new InvariantError('Failed to add playlist.');
@@ -34,7 +34,7 @@ class PlaylistsService {
         WHERE playlists.owner = $1 OR collaborations.user_id = $1`,
       values: [owner],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     return result.rows;
   }
@@ -47,7 +47,7 @@ class PlaylistsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new NotFoundError('Playlist not found.');
     }
@@ -60,7 +60,7 @@ class PlaylistsService {
       text: 'DELETE FROM playlists WHERE id = $1',
       values: [playlistId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     if (!result.rowCount) {
       throw new InvariantError('Failed to delete playlist.');
@@ -73,7 +73,7 @@ class PlaylistsService {
       text: 'INSERT INTO playlistsongs VALUES($1, $2, $3) RETURNING id',
       values: [id, playlistId, songId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     if (!result.rowCount) {
       throw new InvariantError('Failed to add Playlist Song.');
@@ -89,7 +89,7 @@ class PlaylistsService {
         WHERE playlistsongs.playlist_id = $1`,
       values: [playlistId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     return result.rows;
   }
@@ -99,7 +99,7 @@ class PlaylistsService {
       text: 'DELETE FROM playlistsongs WHERE song_id = $1 RETURNING id',
       values: [songId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     if (!result.rowCount) {
       throw new InvariantError('Failed to delete Playlist song.');
@@ -113,7 +113,7 @@ class PlaylistsService {
       text: 'SELECT * FROM playlists WHERE id = $1',
       values: [playlistId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     const { owner } = result.rows[0];
     if (owner !== ownerId) {
@@ -142,7 +142,7 @@ class PlaylistsService {
       values: [playlistId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     if (!result.rowCount) {
       throw new NotFoundError('Playlist not found.');
