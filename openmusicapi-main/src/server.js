@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
@@ -35,8 +34,12 @@ const activities = require('./api/activities');
 const ActivitiesService = require('./services/postgres/ActivitiesService');
 
 const exportPlaylists = require('./api/exports');
-const ExportPlaylistsValidator = require('./validator/exports');
 const ProducerService = require('./services/rabbitmq/ProducerService');
+const ExportPlaylistsValidator = require('./validator/exports');
+
+const uploads = require('./api/uploads');
+const StorageService = require('./services/S3/StorageService');
+const UploadsValidator = require('./validator/uploads');
 
 const init = async () => {
   const albumsService = new AlbumsService();
@@ -46,6 +49,7 @@ const init = async () => {
   const collaborationsService = new CollaborationsServices();
   const playlistsService = new PlaylistsService(collaborationsService);
   const activitiesService = new ActivitiesService();
+  const storageService = new StorageService();
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -141,6 +145,14 @@ const init = async () => {
         producerService: ProducerService,
         playlistsService,
         validator: ExportPlaylistsValidator,
+      },
+    },
+    {
+      plugin: uploads,
+      options: {
+        storageService,
+        albumsService,
+        validator: UploadsValidator,
       },
     },
   ]);

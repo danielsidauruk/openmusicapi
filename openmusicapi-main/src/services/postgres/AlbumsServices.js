@@ -12,7 +12,7 @@ class AlbumsService {
     const id = `album-${nanoid(16)}`;
 
     const query = {
-      text: 'INSERT INTO albums VALUES($1, $2, $3) RETURNING id',
+      text: 'INSERT INTO albums VALUES($1, $2, $3, NULL) RETURNING id',
       values: [id, name, year],
     };
 
@@ -40,6 +40,9 @@ class AlbumsService {
     if (!result.rows.length) {
       throw new NotFoundError('Album not found.');
     }
+
+    result.rows[0].coverUrl = result.rows[0].coverurl;
+    delete result.rows[0].coverurl;
 
     return result.rows[0];
   }
@@ -72,11 +75,22 @@ class AlbumsService {
       text: 'DELETE FROM albums WHERE id = $1 RETURNING id',
       values: [id],
     };
-
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Failed to delete album. Id not found.');
+    }
+  }
+
+  async updateAlbumCover(coverUrl, albumId) {
+    const query = {
+      text: 'UPDATE albums SET coverurl = $1 WHERE id = $2 RETURNING id',
+      values: [coverUrl, albumId],
+    };
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Failed to add album cover.');
     }
   }
 }
