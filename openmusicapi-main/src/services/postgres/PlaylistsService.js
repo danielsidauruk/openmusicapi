@@ -7,7 +7,7 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 class PlaylistsService {
   constructor(collaborationsService) {
     this._pool = new Pool();
-    this.collaborationsService = collaborationsService;
+    this._collaborationsService = collaborationsService;
   }
 
   async addPlaylist(playlist, owner) {
@@ -129,7 +129,7 @@ class PlaylistsService {
         throw error;
       }
       try {
-        await this.collaborationsService.verifyCollaborator(playlistId, ownerId);
+        await this._collaborationsService.verifyCollaborator(playlistId, ownerId);
       } catch {
         throw error;
       }

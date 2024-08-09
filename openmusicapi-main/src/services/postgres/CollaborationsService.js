@@ -4,7 +4,7 @@ const InvariantError = require('../../exceptions/InvariantError');
 
 class CollaborationsService {
   constructor() {
-    this.pool = new Pool();
+    this._pool = new Pool();
   }
 
   async addCollaboration(playlistId, userId) {
@@ -13,7 +13,7 @@ class CollaborationsService {
       text: 'INSERT INTO collaborations VALUES($1, $2, $3) RETURNING id',
       values: [id, playlistId, userId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new InvariantError('Failed to add collaboration.');
     }
@@ -28,7 +28,7 @@ class CollaborationsService {
         RETURNING id`,
       values: [playlistId, userId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new InvariantError('Failed to delete collaboration.');
     }
@@ -40,7 +40,7 @@ class CollaborationsService {
         WHERE user_id = $1 AND playlist_id = $2`,
       values: [userId, playlistId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new InvariantError('You don\'t have collaboration.');
     }

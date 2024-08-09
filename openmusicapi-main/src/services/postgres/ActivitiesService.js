@@ -4,7 +4,7 @@ const InvariantError = require('../../exceptions/InvariantError');
 
 class ActivitiesService {
   constructor() {
-    this.pool = new Pool();
+    this._pool = new Pool();
   }
 
   async addActivity(playlistId, songId, userId, action) {
@@ -15,7 +15,7 @@ class ActivitiesService {
       values: [id, playlistId, songId, userId, action],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new InvariantError('Activity failed added.');
     }
@@ -36,7 +36,7 @@ class ActivitiesService {
       values: [playlistId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     return result.rows;
   }
 }

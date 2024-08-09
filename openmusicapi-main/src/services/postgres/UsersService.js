@@ -7,7 +7,7 @@ const AuthenticationError = require('../../exceptions/AuthenticationError');
 
 class UsersService {
   constructor() {
-    this.pool = new Pool();
+    this._pool = new Pool();
   }
 
   async postUser(username, password, fullname) {
@@ -20,7 +20,7 @@ class UsersService {
       values: [id, username, hashedPassword, fullname],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     if (!result.rowCount) {
       throw new InvariantError('Failed to add user.');
@@ -34,7 +34,7 @@ class UsersService {
       text: 'SELECT * FROM users WHERE id = $1',
       values: [userId],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new NotFoundError('User not found.');
     }
@@ -45,7 +45,7 @@ class UsersService {
       text: 'SELECT * FROM users WHERE username = $1',
       values: [username],
     };
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     if (result.rowCount > 0) {
       throw new InvariantError('Failed to add user. Username is already registered.');
     }
@@ -57,7 +57,7 @@ class UsersService {
       values: [username],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
 
     if (!result.rowCount) {
       throw new AuthenticationError('The credentials you provided are incorrect.');

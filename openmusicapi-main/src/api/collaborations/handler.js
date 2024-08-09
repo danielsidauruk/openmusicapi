@@ -2,25 +2,25 @@ const autoBind = require('auto-bind');
 
 class CollaborationsHandler {
   constructor(collaborationsService, usersService, playlistsService, validator) {
-    this.collaborationsService = collaborationsService;
-    this.usersService = usersService;
-    this.playlistsService = playlistsService;
-    this.validator = validator;
+    this._collaborationsService = collaborationsService;
+    this._usersService = usersService;
+    this._playlistsService = playlistsService;
+    this._validator = validator;
 
     autoBind(this);
   }
 
   async postCollaborationsHandler(request, h) {
-    this.validator.validateCollaborationPayload(request.payload);
+    this._validator.validateCollaborationPayload(request.payload);
 
     const { id: credentialId } = request.auth.credentials;
     const { playlistId, userId } = request.payload;
 
-    await this.usersService.verifyUser(userId);
-    await this.playlistsService.verifyPlaylist(playlistId);
-    await this.playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+    await this._usersService.verifyUser(userId);
+    await this._playlistsService.verifyPlaylist(playlistId);
+    await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
 
-    const collaborationId = await this.collaborationsService.addCollaboration(playlistId, userId);
+    const collaborationId = await this._collaborationsService.addCollaboration(playlistId, userId);
 
     const response = h.response({
       status: 'success',
@@ -32,15 +32,15 @@ class CollaborationsHandler {
   }
 
   async deleteCollaborationByIdHandler(request, h) {
-    this.validator.validateCollaborationPayload(request.payload);
+    this._validator.validateCollaborationPayload(request.payload);
 
     const { id: credentialId } = request.auth.credentials;
     const { playlistId, userId } = request.payload;
 
-    await this.usersService.verifyUser(userId);
-    await this.playlistsService.verifyPlaylist(playlistId);
-    await this.playlistsService.verifyPlaylistOwner(playlistId, credentialId);
-    await this.collaborationsService.deleteCollaborationById(playlistId, userId);
+    await this._usersService.verifyUser(userId);
+    await this._playlistsService.verifyPlaylist(playlistId);
+    await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+    await this._collaborationsService.deleteCollaborationById(playlistId, userId);
 
     const response = h.response({
       status: 'success',
